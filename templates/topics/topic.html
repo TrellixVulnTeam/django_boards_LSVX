@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ topic.subject }}
+{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'topic_reply' topic.board.pk topic.pk %}" class="btn btn-primary">Reply</a>
+
+       <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item" aria-current="page">
+                <a href="{% url 'home' %}">Boards</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a href="{% url 'board_topics' topic.board.pk %}">{{ topic.board.name }}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{ topic.subject }}</li>
+          </ol>
+        </nav>
+
+    <table class="table table-bordered">
+
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Comment</th>
+                <th>Create By</th>
+                <th>created at</th>
+                <th>updated at</th>
+                <th>updated by</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+    {% for comment in topic.comments.all %}
+
+        <tr>
+            <td>{{ comment.pk }}</td>
+            <td>{{ comment.message }}</td>
+            <td>{{ comment.created_by }}</td>
+            <td>{{ comment.created_at }}</td>
+            <td>{{ comment.updated_at }}</td>
+            <td>{{ comment.updated_by }}</td>
+            {% if comment.created_by == user %}
+            <td>
+                <a href="{% url 'edit_comment' comment.topic.board.pk comment.topic.pk comment.pk %}" class="btn btn-primary">edit</a>
+                <a class="btn btn-danger">delete</a>
+            </td>
+        {% endif %}
+        </tr>
+
+
+    {% endfor %}
+        </tbody>
+
+    </table>
+
+{% endblock %}

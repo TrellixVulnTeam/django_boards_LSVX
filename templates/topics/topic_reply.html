@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ topic.subject }} | reply
+{% endblock %}
+
+{% block content %}
+
+    <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item" aria-current="page">
+                <a href="{% url 'home' %}">Boards</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a href="{% url 'board_topics' topic.board.pk %}">{{ topic.board.name }}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a href="{% url 'topic' topic.board.pk topic.pk %}">{{ topic.subject }}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">reply</li>
+          </ol>
+        </nav>
+
+    <form method="post" novalidate>
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+    <button class="btn btn-primary" type="submit">post a reply</button>
+    </form>
+
+    {% for comment in topic.comments.all %}
+        <div class="card w-75">
+          <div class="card-body">
+              <p class="card-text">by: {{ comment.created_by }}</p>
+              <h3 class="card-title">{{ comment.message}}</h3>
+              <p class="text-lg-end">{{ comment.created_at }}</p>
+          </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+
+        <h1>Boards</h1>
+        <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Board Name</th>
+                <th>topic</th>
+                <th>comments</th>
+                <th>Last Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for board in boards %}
+
+        <tr>
+            <td>{{ board.id }}</td>
+            <td>
+                <a href="{% url 'board_topics' board.pk %}">{{ board.name }}</a>
+                <small class="text-muted d-block">{{ board.description }}</small>
+            </td>
+            <td>{{ board.topics.count }}</td>
+            <td>{{ board.get_comments_count }}</td>
+            <td>
+
+                {% with post=board.get_last_comment %}
+                    {% if post %}
+                        at {{ post.created_at }} by {{ post.created_by }}
+                    {% else %}
+                        <p class="text-danger">there's no comment in this board</p>
+                    {% endif %}
+                {% endwith %}
+            </td>
+        </tr>
+
+        {% endfor %}
+        </tbody>
+
+    </table>
+
+{% endblock %}
